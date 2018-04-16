@@ -14,7 +14,7 @@ namespace Specification.Core
 
         public ISpecification<T> Or(ISpecification<T> specification)
         {
-            throw new NotImplementedException();
+            return new OrSpecification<T>(this, specification);
         }
 
         public ISpecification<T> Not(ISpecification<T> specification)
