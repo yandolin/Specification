@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Specification.Core
@@ -16,7 +17,12 @@ namespace Specification.Core
 
         public override Expression<Func<T, bool>> ToExpression()
         {
-            throw new NotImplementedException();
+            var leftExpression = this._leftSpecification.ToExpression();
+            var rightExpression = this._rightSpecification.ToExpression();
+
+            var andExpression = Expression.AndAlso(leftExpression.Body, rightExpression.Body);
+
+            return Expression.Lambda<Func<T, bool>>(andExpression, leftExpression.Parameters.Single());
         }
     }
 }
