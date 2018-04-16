@@ -19,7 +19,7 @@ namespace Specification.Core
 
         public ISpecification<T> Not(ISpecification<T> specification)
         {
-            throw new NotImplementedException();
+            return new NotSpecification<T>(specification);
         }
     }
 }
