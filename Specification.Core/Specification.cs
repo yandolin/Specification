@@ -9,7 +9,7 @@ namespace Specification.Core
 
         public ISpecification<T> And(ISpecification<T> specification)
         {
-            throw new NotImplementedException();
+            return new AndSpecification<T>(this, specification);
         }
 
         public ISpecification<T> Or(ISpecification<T> specification)
