@@ -11,8 +11,8 @@ namespace Specification.Core
 
         public OrSpecification(ISpecification<T> leftSpecification, ISpecification<T> rightSpecification)
         {
-            this._leftSpecification = leftSpecification ?? throw new NullReferenceException();
-            this._rightSpecification = rightSpecification ?? throw new NullReferenceException();
+            this._leftSpecification = leftSpecification ?? throw new ArgumentNullException();
+            this._rightSpecification = rightSpecification ?? throw new ArgumentNullException();
         }
 
         public override Expression<Func<T, bool>> ToExpression()
@@ -22,7 +22,11 @@ namespace Specification.Core
 
             var orExpression = Expression.Or(leftExpression.Body, rightExpression.Body);
 
-            return Expression.Lambda<Func<T, bool>>(orExpression, leftExpression.Parameters.Single());
+            var parameter = leftExpression.Parameters.Single();
+
+            orExpression = (BinaryExpression) new ParameterReplacer(parameter).Visit(orExpression);
+
+            return Expression.Lambda<Func<T, bool>>(orExpression, parameter);
         }
     }
 }
