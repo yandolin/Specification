@@ -11,8 +11,8 @@ namespace Specification.Core
 
         public AndSpecification(ISpecification<T> leftSpecification, ISpecification<T> rightSpecification)
         {
-            this._leftSpecification = leftSpecification ?? throw new NullReferenceException();
-            this._rightSpecification = rightSpecification ?? throw new NullReferenceException();
+            this._leftSpecification = leftSpecification ?? throw new ArgumentNullException();
+            this._rightSpecification = rightSpecification ?? throw new ArgumentNullException();
         }
 
         public override Expression<Func<T, bool>> ToExpression()
@@ -22,7 +22,11 @@ namespace Specification.Core
 
             var andExpression = Expression.AndAlso(leftExpression.Body, rightExpression.Body);
 
-            return Expression.Lambda<Func<T, bool>>(andExpression, leftExpression.Parameters.Single());
+            var parameter = leftExpression.Parameters.Single();
+
+            andExpression = (BinaryExpression) new ParameterReplacer(parameter).Visit(andExpression);
+
+            return Expression.Lambda<Func<T, bool>>(andExpression, parameter);
         }
     }
 }
