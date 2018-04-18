@@ -10,7 +10,7 @@ namespace Specification.Core
 
         public NotSpecification(ISpecification<T> specification)
         {
-            this._specification = specification ?? throw new NullReferenceException();
+            this._specification = specification ?? throw new ArgumentNullException();
         }
 
         public override Expression<Func<T, bool>> ToExpression()
